@@ -207,6 +207,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 this.scrollIntoView();
             });
         }
+        if (payload.action == Action.ViewRoom &&
+            payload.room_id === this.props.room.roomId) {
+            this.saveUnreadStatus(this.props.room.roomId, false);
+            this.forceUpdate();
+            this.notificationState.updateNotificationState();
+        }
     };
 
     private onCommunityUpdate = (roomId: string) => {
@@ -341,6 +347,21 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             room_id: this.props.room.roomId,
         });
         this.setState({ generalMenuPosition: null }); // hide the menu
+    };
+
+    private saveUnreadStatus(roomId: string, status: bool) {
+        let ur = localStorage.getItem('w-unread-rooms');
+        ur = ur? JSON.parse(ur) : {};
+        ur[roomId] = status;
+        localStorage.setItem('w-unread-rooms', JSON.stringify(ur));
+    };
+
+    private onMarkAsUnread = (ev: ButtonEvent) => {
+        let roomId = this.props.room.roomId;
+        this.saveUnreadStatus(roomId, true);
+        this.setState({ generalMenuPosition: null }); // hide the menu
+        this.forceUpdate();
+        this.notificationState.updateNotificationState();
     };
 
     private onOpenRoomSettings = (ev: ButtonEvent) => {
@@ -542,6 +563,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}
                         iconClassName="mx_RoomTile_iconSettings"
+                    />
+                    <IconizedContextMenuOption
+                        onClick={this.onMarkAsUnread}
+                        label="Mark as Unread"
+                        iconClassName="mx_RoomTile_iconNotificationsDefault"
                     />
                 </IconizedContextMenuOptionList>
                 <IconizedContextMenuOptionList red>

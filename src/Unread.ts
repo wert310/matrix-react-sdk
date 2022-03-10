@@ -52,6 +52,11 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
 export function doesRoomHaveUnreadMessages(room: Room): boolean {
     const myUserId = MatrixClientPeg.get().getUserId();
 
+    // If it was marked unread from the UI
+    let ur_status = JSON.parse(localStorage.getItem('w-unread-rooms'));
+    if (ur_status && ur_status[room.roomId])
+        return true;
+
     // get the most recent read receipt sent by our account.
     // N.B. this is NOT a read marker (RM, aka "read up to marker"),
     // despite the name of the method :((

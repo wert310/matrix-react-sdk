@@ -59,7 +59,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
                 {
                     reactors: () => {
                         return <div className="mx_Tooltip_title">
-                            { formatCommaSeparatedList(senders, 6) }
+                            { formatCommaSeparatedList(senders) }
                         </div>;
                     },
                     reactedWith: (sub) => {

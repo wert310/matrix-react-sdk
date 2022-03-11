@@ -116,7 +116,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
                 senders.push(member?.name || reactionEvent.getSender());
             }
 
-            const reactors = formatCommaSeparatedList(senders, 6);
+            const reactors = formatCommaSeparatedList(senders);
             if (content) {
                 label = _t("%(reactors)s reacted with %(content)s", { reactors, content });
             } else {
